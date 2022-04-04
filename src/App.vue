@@ -1,16 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <navigation></navigation>
+  <game-content></game-content>
+  <modal-dialog v-if="showDialog"></modal-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import { defineComponent, computed } from "vue";
+import ModalDialog from "./components/ModalDialog.vue";
+import Navigation from "./components/Navigation.vue";
+import { getLayout } from "./layout-state";
+import GameContent from "./components/GameContent.vue";
 
 export default defineComponent({
   name: "App",
   components: {
-    HelloWorld,
+    ModalDialog,
+    Navigation,
+    GameContent,
+  },
+  setup() {
+    const showDialog = computed(() => {
+      return getLayout().isDialogOpen;
+    });
+    return {
+      showDialog,
+    };
   },
 });
 </script>
@@ -20,8 +34,13 @@ export default defineComponent({
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #1f2431;
 }
 </style>
