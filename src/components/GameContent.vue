@@ -41,7 +41,10 @@
       <button
         @click="submitAnswer"
         class="submit-button"
-        :class="answeredQuestion ? 'answered-question' : ''"
+        :class="{
+          'selected-question': selectedQuestion,
+          'submitted-answer': submittedAnswer,
+        }"
       >
         Submit
       </button>
@@ -84,8 +87,10 @@ export default defineComponent({
     const startDate = new Date("April 5, 2022");
     const diff = Math.abs(now.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+
     const game = games.filter((game) => game.day == diffDays)[0];
-    const answeredQuestion = ref(false);
+
+    const selectedQuestion = ref(false);
     const answerNumber = ref<number>();
     const submittedAnswer = ref(false);
     const answeredCorrect = ref<boolean>(false);
@@ -97,10 +102,10 @@ export default defineComponent({
         return;
       }
       answerNumber.value = number;
-      answeredQuestion.value = true;
+      selectedQuestion.value = true;
     };
     const submitAnswer = () => {
-      if (answeredQuestion.value && !submittedAnswer.value) {
+      if (selectedQuestion.value && !submittedAnswer.value) {
         submittedAnswer.value = true;
         if (answerNumber.value == game.correctChoice) {
           answeredCorrect.value = true;
@@ -120,7 +125,7 @@ export default defineComponent({
     return {
       game,
       answerQuestion,
-      answeredQuestion,
+      selectedQuestion,
       answerNumber,
       submittedAnswer,
       submitAnswer,
@@ -385,8 +390,11 @@ export default defineComponent({
     bottom: 0;
     width: 100%;
   }
+  &.submitted-answer {
+    transform: scale(0);
+  }
 }
-.submit-button.answered-question {
+.submit-button.selected-question {
   cursor: pointer;
   background: #105c90;
   color: white;
