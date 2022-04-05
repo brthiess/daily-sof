@@ -12,12 +12,13 @@
       <li
         v-for="(answer, index) in game.choices"
         :key="'answer-' + index"
-        @click="answerQuestion(game, answer.number)"
+        @click="answerQuestion(answer.number)"
         class="quiz-answer"
-        v-bind:class="{
-          'answer-correct': answer.correct,
-          'answer-incorrect': !answer.correct,
-          'this-answer-picked': answer.picked,
+        :class="{
+          'answer-correct': answer.correct && submittedAnswer,
+          'answer-incorrect': !answer.correct && submittedAnswer,
+          'this-answer-picked': answer.number == answerNumber,
+          'submitted-answer': submittedAnswer,
         }"
       >
         <ul class="rogue-answers-container">
@@ -36,23 +37,96 @@
         <p class="quiz-answer-text">{{ answer.text }}</p>
       </li>
     </ul>
+    <div class="submit-button-container">
+      <button
+        @click="submitAnswer"
+        class="submit-button"
+        :class="answeredQuestion ? 'answered-question' : ''"
+      >
+        Submit
+      </button>
+    </div>
+    <div class="correct-modal">
+      <lottie-animation
+        v-if="showCorrectAnimation"
+        path="correct.json"
+        background="transparent"
+        :speed="1"
+        :loop="false"
+        :autoPlay="showCorrectAnimation"
+      ></lottie-animation>
+    </div>
+    <div class="correct-modal">
+      <lottie-animation
+        v-if="showIncorrectAnimation"
+        path="incorrect.json"
+        background="transparent"
+        :speed="1"
+        :loop="false"
+        :autoPlay="showIncorrectAnimation"
+      ></lottie-animation>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { games } from "../games";
+import LottieAnimation from "lottie-vuejs/src/LottieAnimation.vue"; // import lottie-vuejs
 
 export default defineComponent({
   name: "GameContent",
+  components: {
+    LottieAnimation,
+  },
   setup() {
     const now = new Date();
-    const startDate = new Date("April 4, 2022");
+    const startDate = new Date("April 5, 2022");
     const diff = Math.abs(now.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
     const game = games.filter((game) => game.day == diffDays)[0];
+    const answeredQuestion = ref(false);
+    const answerNumber = ref<number>();
+    const submittedAnswer = ref(false);
+    const answeredCorrect = ref<boolean>(false);
+    const showCorrectAnimation = ref<boolean>(false);
+    const showIncorrectAnimation = ref<boolean>(false);
+
+    const answerQuestion = (number: number) => {
+      if (submittedAnswer.value) {
+        return;
+      }
+      answerNumber.value = number;
+      answeredQuestion.value = true;
+    };
+    const submitAnswer = () => {
+      if (answeredQuestion.value && !submittedAnswer.value) {
+        submittedAnswer.value = true;
+        if (answerNumber.value == game.correctChoice) {
+          answeredCorrect.value = true;
+          showCorrectAnimation.value = true;
+          setTimeout(function () {
+            showCorrectAnimation.value = false;
+          }, 2000);
+        } else {
+          answeredCorrect.value = false;
+          showIncorrectAnimation.value = true;
+          setTimeout(function () {
+            showIncorrectAnimation.value = false;
+          }, 2000);
+        }
+      }
+    };
     return {
       game,
+      answerQuestion,
+      answeredQuestion,
+      answerNumber,
+      submittedAnswer,
+      submitAnswer,
+      answeredCorrect,
+      showCorrectAnimation,
+      showIncorrectAnimation,
     };
   },
 });
@@ -74,7 +148,7 @@ export default defineComponent({
   border-bottom: 1px solid #333;
   padding-bottom: 10px;
   font-size: 22px;
-  color: white;
+  color: #333;
   @media @smartphones {
     font-size: 20px;
     padding-bottom: 5px;
@@ -86,14 +160,14 @@ export default defineComponent({
   grid-column-start: 1;
   display: flex;
   margin: 5px 0;
-  color: #bbb;
+  color: #777;
   font-size: 15px;
   @media @smartphones {
     font-size: 13px;
   }
 }
 .quiz-episode-number {
-  color: #eee;
+  color: #333;
 }
 
 .quiz-question-container {
@@ -116,7 +190,7 @@ export default defineComponent({
 
 .quiz-question {
   font-size: 34px;
-  color: #f9d001;
+  color: #333;
   margin-top: 40px;
   @media @tablets {
     font-size: 28px;
@@ -148,7 +222,16 @@ export default defineComponent({
   transition: all 0.15s;
   position: relative;
   cursor: pointer;
-
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  &:hover {
+    background: rgb(191, 229, 255);
+  }
+  &.submitted-answer {
+    &:hover {
+      background: white;
+      cursor: initial;
+    }
+  }
   @media @tablets {
     margin: 10px 0;
     font-size: 18px;
@@ -164,14 +247,15 @@ export default defineComponent({
     }
   }
 }
-
-.quiz-answer.this-answer-picked.answer-correct {
-  background: #5fba7d;
+.quiz-answer.this-answer-picked {
+  background: #105c90;
   color: white;
 }
 .quiz-answer.this-answer-picked.answer-incorrect {
   background: #e74c3c;
-  color: white;
+}
+.quiz-answer.answer-correct {
+  background: #5fba7d;
 }
 
 .quiz-answer:first-child {
@@ -186,6 +270,10 @@ export default defineComponent({
   color: white;
   background-color: #105c90;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+.quiz-answer-text {
+  font-weight: 400;
+  font-size: 16px;
 }
 .rogue-answers-container {
   list-style: none;
@@ -272,5 +360,50 @@ export default defineComponent({
   font-size: 140px;
   align-self: flex-end;
   display: none; /*hide for now.  Not sure how we want to display this*/
+}
+.submit-button-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 0;
+}
+.submit-button {
+  width: 250px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #ccc;
+  cursor: not-allowed;
+  transition: all 0.3s;
+  font-size: 25px;
+  text-transform: uppercase;
+  @media @tablets {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+}
+.submit-button.answered-question {
+  cursor: pointer;
+  background: #105c90;
+  color: white;
+  box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, 0.3);
+  &:hover {
+    background: #084b77;
+  }
+}
+.correct-modal {
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  height: 100%;
 }
 </style>

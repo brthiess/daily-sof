@@ -30,8 +30,9 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+#app,
+button {
+  font-family: "Raleway", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -41,6 +42,6 @@ export default defineComponent({
   box-sizing: border-box;
 }
 body {
-  background: #1f2431;
+  background: #f5f2b7;
 }
 </style>

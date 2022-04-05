@@ -7,6 +7,7 @@ export interface Game {
   choices: Array<Choice>;
   rogueAnswers: Array<RogueAnswer>;
   question: string;
+  correctChoice: number;
 }
 
 export interface Choice {
@@ -29,6 +30,7 @@ export const games: Array<Game> = [
     date: "May 31, 2014",
     episodeNumber: 464,
     question: "Pick the fiction",
+    correctChoice: 1,
     choices: [
       {
         number: 1,
