@@ -75,6 +75,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { games } from "../games";
+import { setAreStatsOpen } from "../layout-state";
 import LottieAnimation from "lottie-vuejs/src/LottieAnimation.vue"; // import lottie-vuejs
 
 export default defineComponent({
@@ -112,14 +113,17 @@ export default defineComponent({
           showCorrectAnimation.value = true;
           setTimeout(function () {
             showCorrectAnimation.value = false;
-          }, 2000);
+          }, 3000);
         } else {
           answeredCorrect.value = false;
           showIncorrectAnimation.value = true;
           setTimeout(function () {
             showIncorrectAnimation.value = false;
-          }, 2000);
+          }, 3000);
         }
+        setTimeout(function () {
+          setAreStatsOpen(true);
+        }, 3000);
       }
     };
     return {

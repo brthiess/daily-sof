@@ -16,15 +16,22 @@
         </svg>
       </div>
     </div>
+    <div class="content-container">
+      <Stats></Stats>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import { setIsDialogOpen } from "../layout-state";
+import Stats from "./Stats.vue";
 
 export default defineComponent({
   name: "ModalDialog",
+  components: {
+    Stats,
+  },
   setup() {
     const closeDialog = () => {
       setIsDialogOpen(false);
