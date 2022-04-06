@@ -55,6 +55,24 @@ export const games: Array<Game> = [
         correct: true,
         number: 1,
       },
+      {
+        id: "evan",
+        name: "Evan",
+        correct: true,
+        number: 1,
+      },
+      {
+        id: "bob",
+        name: "Bob",
+        correct: false,
+        number: 1,
+      },
+      {
+        id: "cara",
+        name: "Cara",
+        correct: false,
+        number: 1,
+      },
     ],
   },
 ];

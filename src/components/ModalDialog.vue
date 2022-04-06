@@ -15,16 +15,16 @@
           ></path>
         </svg>
       </div>
-    </div>
-    <div class="content-container">
-      <Stats></Stats>
+      <div class="content-container">
+        <Stats v-show="showStats"></Stats>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { setIsDialogOpen } from "../layout-state";
+import { defineComponent, computed } from "vue";
+import { setIsDialogOpen, getLayout } from "../layout-state";
 import Stats from "./Stats.vue";
 
 export default defineComponent({
@@ -36,8 +36,10 @@ export default defineComponent({
     const closeDialog = () => {
       setIsDialogOpen(false);
     };
+    const showStats = computed(() => getLayout().areStatsOpen);
     return {
       closeDialog,
+      showStats,
     };
   },
 });
@@ -61,5 +63,12 @@ export default defineComponent({
   width: 400px;
   border-radius: 5px;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-flow: column;
+}
+.close-button {
+  align-self: flex-end;
+  padding: 10px;
+  cursor: pointer;
 }
 </style>

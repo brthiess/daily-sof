@@ -27,6 +27,8 @@ export const setIsDialogOpen = (isDialogOpen: boolean): void => {
   layout.isDialogOpen = isDialogOpen;
   if (!isDialogOpen) {
     layout.areInstructionsOpen = false;
+    layout.areSettingsOpen = false;
+    layout.areStatsOpen = false;
   }
 };
 

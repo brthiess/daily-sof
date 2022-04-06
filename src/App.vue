@@ -10,6 +10,7 @@ import ModalDialog from "./components/ModalDialog.vue";
 import Navigation from "./components/Navigation.vue";
 import { getLayout } from "./layout-state";
 import GameContent from "./components/GameContent.vue";
+import { loadUserStats } from "./user-state";
 
 export default defineComponent({
   name: "App",
@@ -19,6 +20,7 @@ export default defineComponent({
     GameContent,
   },
   setup() {
+    loadUserStats();
     const showDialog = computed(() => {
       return getLayout().isDialogOpen;
     });

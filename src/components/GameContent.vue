@@ -77,6 +77,7 @@ import { defineComponent, ref } from "vue";
 import { games } from "../games";
 import { setAreStatsOpen } from "../layout-state";
 import LottieAnimation from "lottie-vuejs/src/LottieAnimation.vue"; // import lottie-vuejs
+import { addLoss, addWin } from "@/user-state";
 
 export default defineComponent({
   name: "GameContent",
@@ -85,7 +86,7 @@ export default defineComponent({
   },
   setup() {
     const now = new Date();
-    const startDate = new Date("April 5, 2022");
+    const startDate = new Date("April 6, 2022");
     const diff = Math.abs(now.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
 
@@ -111,12 +112,14 @@ export default defineComponent({
         if (answerNumber.value == game.correctChoice) {
           answeredCorrect.value = true;
           showCorrectAnimation.value = true;
+          addWin(game.id);
           setTimeout(function () {
             showCorrectAnimation.value = false;
           }, 3000);
         } else {
           answeredCorrect.value = false;
           showIncorrectAnimation.value = true;
+          addLoss(game.id);
           setTimeout(function () {
             showIncorrectAnimation.value = false;
           }, 3000);
@@ -236,10 +239,7 @@ export default defineComponent({
     background: rgb(191, 229, 255);
   }
   &.submitted-answer {
-    &:hover {
-      background: white;
-      cursor: initial;
-    }
+    pointer-events: none;
   }
   @media @tablets {
     margin: 10px 0;
@@ -291,6 +291,7 @@ export default defineComponent({
   padding: 0;
   top: -43px;
   right: 15px;
+  pointer-events: none;
   @media @laptops {
     top: -30px;
   }
