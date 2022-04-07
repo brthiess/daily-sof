@@ -86,7 +86,7 @@ export default defineComponent({
   },
   setup() {
     const now = new Date();
-    const startDate = new Date("April 6, 2022");
+    const startDate = new Date("April 7, 2022");
     const diff = Math.abs(now.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
 

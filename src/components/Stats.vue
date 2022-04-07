@@ -41,6 +41,13 @@
         v-for="(ranking, index) in rankings"
         :key="ranking.name"
         :class="ranking.name == 'You' ? 'you' : ''"
+        :style="
+          'background: linear-gradient(90deg, #105c90, #105c90 ' +
+          (ranking.numberOfGamesWon / ranking.numberOfGamesPlayed) * 100 +
+          '%, #888 ' +
+          (ranking.numberOfGamesWon / ranking.numberOfGamesPlayed) * 100 +
+          '%, #888);'
+        "
       >
         <p class="rank">{{ index + 1 }}</p>
         <p class="name">{{ ranking.name }}</p>
@@ -67,43 +74,11 @@ export default defineComponent({
   name: "Stats",
   setup() {
     const userStats = ref<UserStats>(getUserStats());
-    console.log(userStats);
 
-    const rogueStats: Record<string, RogueStats> = {};
-    getUserStats().gamesPlayed.forEach((gameId) => {
-      games.forEach((game) => {
-        if (gameId == game.id) {
-          game.rogueAnswers.forEach((rogue) => {
-            if (!rogueStats[rogue.id]) {
-              rogueStats[rogue.id] = {
-                numberOfGamesPlayed: 0,
-                numberOfGamesWon: 0,
-                name: rogue.name,
-              };
-            }
-            rogueStats[rogue.id].numberOfGamesPlayed++;
-            rogueStats[rogue.id].numberOfGamesWon += rogue.correct ? 1 : 0;
-          });
-        }
-      });
-    });
-    rogueStats["you"] = {} as RogueStats;
-    rogueStats["you"].numberOfGamesPlayed = userStats.value.numberOfGamesPlayed;
-    rogueStats["you"].numberOfGamesWon = userStats.value.numberOfGamesWon;
-    rogueStats["you"].name = "You";
-
-    let rankings = Array<RogueStats>();
-    Object.keys(rogueStats).map(function (key) {
-      let s = rogueStats[key];
-      rankings.push(s);
-      return rankings;
-    });
-
-    rankings.sort(compare);
+    let rankings = compileRogueStats();
 
     return {
       userStats,
-      rogueStats,
       rankings,
     };
   },
@@ -119,6 +94,46 @@ function compare(a: RogueStats, b: RogueStats) {
     return 1;
   }
   return 0;
+}
+
+function compileRogueStats(): Array<RogueStats> {
+  const userStats = getUserStats();
+  const rogueStats: Record<string, RogueStats> = {};
+  userStats.gamesPlayed.forEach((gameId) => {
+    games.forEach((game) => {
+      if (gameId == game.id) {
+        game.rogueAnswers.forEach((rogue) => {
+          if (!rogueStats[rogue.id]) {
+            rogueStats[rogue.id] = {
+              numberOfGamesPlayed: 0,
+              numberOfGamesWon: 0,
+              name: rogue.name,
+            };
+          }
+          rogueStats[rogue.id].numberOfGamesPlayed++;
+          rogueStats[rogue.id].numberOfGamesWon += rogue.correct ? 1 : 0;
+        });
+      }
+    });
+  });
+  rogueStats["you"] = {} as RogueStats;
+  rogueStats["you"].numberOfGamesPlayed = userStats.numberOfGamesPlayed;
+  rogueStats["you"].numberOfGamesWon = userStats.numberOfGamesWon;
+  rogueStats["you"].name = "You";
+  const sortedRogueStats = sortRogueStats(rogueStats);
+  return sortedRogueStats;
+}
+
+function sortRogueStats(rogueStats: Record<string, RogueStats>) {
+  let rankings = Array<RogueStats>();
+  Object.keys(rogueStats).map(function (key) {
+    let s = rogueStats[key];
+    rankings.push(s);
+    return rankings;
+  });
+
+  rankings.sort(compare);
+  return rankings;
 }
 </script>
 
@@ -156,12 +171,11 @@ li {
   display: flex;
   height: 35px;
   align-items: center;
-  padding: 0 5px;
+  padding: 0 9px;
   border-bottom: 1px solid #ccc;
-  &.you {
-    color: white;
-    background: #105c90;
-  }
+  color: white;
+  margin: 8px 0;
+  border-radius: 5px;
 }
 .rank {
   width: 30px;
