@@ -77,7 +77,7 @@ import { defineComponent, ref } from "vue";
 import { games } from "../games";
 import { setAreStatsOpen } from "../layout-state";
 import LottieAnimation from "lottie-vuejs/src/LottieAnimation.vue"; // import lottie-vuejs
-import { addLoss, addWin } from "@/user-state";
+import { addLoss, addWin, getUserStats } from "@/user-state";
 
 export default defineComponent({
   name: "GameContent",
@@ -86,7 +86,7 @@ export default defineComponent({
   },
   setup() {
     const now = new Date();
-    const startDate = new Date("April 7, 2022");
+    const startDate = new Date("April 8, 2022");
     const diff = Math.abs(now.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
 
@@ -94,11 +94,23 @@ export default defineComponent({
 
     const selectedQuestion = ref(false);
     const answerNumber = ref<number>();
-    const submittedAnswer = ref(false);
+
     const answeredCorrect = ref<boolean>(false);
     const showCorrectAnimation = ref<boolean>(false);
     const showIncorrectAnimation = ref<boolean>(false);
+    const userStats = getUserStats();
 
+    const alreadySubmittedAnswer = (): boolean => {
+      let alreadySubmittedAnswer = false;
+      userStats.gamesPlayed.forEach((gameId) => {
+        if (gameId == game.id) {
+          alreadySubmittedAnswer = true;
+        }
+      });
+      return alreadySubmittedAnswer;
+    };
+    const submittedAnswer = ref(alreadySubmittedAnswer());
+    console.log(submittedAnswer.value);
     const answerQuestion = (number: number) => {
       if (submittedAnswer.value) {
         return;

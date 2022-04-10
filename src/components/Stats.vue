@@ -41,25 +41,36 @@
         v-for="(ranking, index) in rankings"
         :key="ranking.name"
         :class="ranking.name == 'You' ? 'you' : ''"
-        :style="
-          'background: linear-gradient(90deg, #105c90, #105c90 ' +
-          (ranking.numberOfGamesWon / ranking.numberOfGamesPlayed) * 100 +
-          '%, #888 ' +
-          (ranking.numberOfGamesWon / ranking.numberOfGamesPlayed) * 100 +
-          '%, #888);'
-        "
       >
         <p class="rank">{{ index + 1 }}</p>
-        <p class="name">{{ ranking.name }}</p>
-        <p class="percentage">
-          {{
-            Math.round(
-              (ranking.numberOfGamesWon / ranking.numberOfGamesPlayed) * 100
-            )
-          }}%
-        </p>
+        <div
+          class="bar"
+          :style="
+            'background: linear-gradient(90deg, ' +
+            (ranking.name == 'You'
+              ? '#006266, #006266 '
+              : '#105c90, #105c90 ') +
+            (ranking.numberOfGamesWon / ranking.numberOfGamesPlayed) * 100 +
+            '%, #888 ' +
+            (ranking.numberOfGamesWon / ranking.numberOfGamesPlayed) * 100 +
+            '%, #888);'
+          "
+        >
+          <p class="name">{{ ranking.name }}</p>
+          <p class="percentage">
+            {{
+              Math.round(
+                (ranking.numberOfGamesWon / ranking.numberOfGamesPlayed) * 100
+              )
+            }}%
+          </p>
+        </div>
       </li>
     </ul>
+    <div v-if="true">
+      <h4>Next Science Or Fiction</h4>
+      <div>{{ timeUntilMidnight }}</div>
+    </div>
   </div>
 </template>
 
@@ -76,7 +87,15 @@ export default defineComponent({
     const userStats = ref<UserStats>(getUserStats());
 
     let rankings = compileRogueStats();
-
+    let timeUntilMidnight = ref<number>(999);
+    const countDownTimer = () => {
+      if (timeUntilMidnight.value > 0) {
+        setTimeout(() => {
+          this.countDown -= 1;
+          this.countDownTimer();
+        }, 1000);
+      }
+    };
     return {
       userStats,
       rankings,
@@ -171,17 +190,26 @@ li {
   display: flex;
   height: 35px;
   align-items: center;
-  padding: 0 9px;
-  border-bottom: 1px solid #ccc;
+  margin: 12px 0;
+  width: 100%;
+}
+.bar {
+  display: flex;
   color: white;
-  margin: 8px 0;
-  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding: 0 10px;
+  justify-content: space-between;
 }
 .rank {
   width: 30px;
 }
 .percentage {
   margin-left: auto;
+  font-weight: bold;
+}
+.you {
   font-weight: bold;
 }
 </style>
