@@ -67,9 +67,9 @@
         </div>
       </li>
     </ul>
-    <div v-if="true">
-      <h4>Next Science Or Fiction</h4>
-      <div>{{ timeUntilMidnight }}</div>
+    <div class="next-sof">
+      <h4 class="next-sof-text">Next Science Or Fiction</h4>
+      <div class="time-left">{{ timeLeft }}</div>
     </div>
   </div>
 </template>
@@ -87,18 +87,32 @@ export default defineComponent({
     const userStats = ref<UserStats>(getUserStats());
 
     let rankings = compileRogueStats();
-    let timeUntilMidnight = ref<number>(999);
-    const countDownTimer = () => {
-      if (timeUntilMidnight.value > 0) {
-        setTimeout(() => {
-          this.countDown -= 1;
-          this.countDownTimer();
-        }, 1000);
-      }
+
+    const getTimeString = () => {
+      let endTime = new Date();
+      endTime.setDate(new Date().getDate() + 1);
+      endTime.setHours(0, 0, 0, 0);
+      let hoursLeft = Math.abs(endTime.getTime() - new Date().getTime()) / 36e5;
+      let minutesLeft = 60 * (hoursLeft % 1);
+      let secondsLeft = 60 * (minutesLeft % 1);
+      let timeString =
+        Math.floor(hoursLeft) +
+        ":" +
+        Math.floor(minutesLeft) +
+        ":" +
+        Math.floor(secondsLeft);
+      return timeString;
     };
+
+    let timeLeft = ref(getTimeString());
+    setInterval(function () {
+      timeLeft.value = getTimeString();
+    }, 1000);
+
     return {
       userStats,
       rankings,
+      timeLeft,
     };
   },
 });
@@ -211,5 +225,15 @@ li {
 }
 .you {
   font-weight: bold;
+}
+.next-sof {
+  margin: 40px 0 20px;
+}
+.next-sof-text {
+  margin: 0;
+}
+.time-left {
+  font-size: 36px;
+  text-align: center;
 }
 </style>

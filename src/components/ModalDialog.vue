@@ -62,7 +62,7 @@ export default defineComponent({
 }
 .dialog {
   position: fixed;
-  top: calc(50% - 100px);
+  top: 150px;
   left: calc(50% - 250px);
   background: white;
   width: 500px;
