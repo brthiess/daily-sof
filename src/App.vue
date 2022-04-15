@@ -8,9 +8,9 @@
 import { defineComponent, computed } from "vue";
 import ModalDialog from "./components/ModalDialog.vue";
 import Navigation from "./components/Navigation.vue";
-import { getLayout } from "./layout-state";
+import { getLayout, setAreInstructionsOpen } from "./layout-state";
 import GameContent from "./components/GameContent.vue";
-import { loadUserStats } from "./user-state";
+import { loadUserStats, getUserStats } from "./user-state";
 
 export default defineComponent({
   name: "App",
@@ -21,6 +21,9 @@ export default defineComponent({
   },
   setup() {
     loadUserStats();
+    if (getUserStats().numberOfGamesPlayed == 0) {
+      setAreInstructionsOpen(true);
+    }
     const showDialog = computed(() => {
       return getLayout().isDialogOpen;
     });

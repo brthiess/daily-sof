@@ -12,12 +12,12 @@
       <li
         v-for="(answer, index) in game.choices"
         :key="'answer-' + index"
-        @click="answerQuestion(answer.number)"
+        @click="selectAnswer(answer.number)"
         class="quiz-answer"
         :class="{
           'answer-correct': answer.correct && submittedAnswer,
           'answer-incorrect': !answer.correct && submittedAnswer,
-          'this-answer-picked': answer.number == answerNumber,
+          'this-answer-picked': answer.number == selectedAnswerNumber,
           'submitted-answer': submittedAnswer,
         }"
       >
@@ -42,7 +42,7 @@
         @click="submitAnswer"
         class="submit-button"
         :class="{
-          'selected-question': selectedQuestion,
+          'selected-question': selectedAnswer,
           'submitted-answer': submittedAnswer,
         }"
       >
@@ -73,11 +73,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { games } from "../games";
 import { setAreStatsOpen } from "../layout-state";
 import LottieAnimation from "lottie-vuejs/src/LottieAnimation.vue"; // import lottie-vuejs
-import { addLoss, addWin, getUserStats } from "@/user-state";
+import { addLoss, addWin } from "@/user-state";
+import {
+  setGame,
+  loadCurrentGame,
+  getCurrentGame,
+  resetCurrentGame,
+  setSubmittedAnswer,
+  setSelectedAnswer,
+} from "@/game-state";
 
 export default defineComponent({
   name: "GameContent",
@@ -85,43 +93,46 @@ export default defineComponent({
     LottieAnimation,
   },
   setup() {
+    loadCurrentGame();
     const now = new Date();
-    const startDate = new Date("April 11, 2022");
+    const startDate = new Date("April 15, 2022");
     const diff = Math.abs(now.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
 
     const game = games.filter((game) => game.day == diffDays)[0];
+    if (getCurrentGame().game?.id != game.id) {
+      resetCurrentGame();
+    }
+    setGame(game);
 
-    const selectedQuestion = ref(false);
-    const answerNumber = ref<number>();
+    if (getCurrentGame().submittedAnswer) {
+      setAreStatsOpen(true);
+    }
+
+    const selectedAnswer = computed(() => getCurrentGame().selectedAnswer);
+    const selectedAnswerNumber = computed(
+      () => getCurrentGame().selectedAnswerNumber
+    );
 
     const answeredCorrect = ref<boolean>(false);
     const showCorrectAnimation = ref<boolean>(false);
     const showIncorrectAnimation = ref<boolean>(false);
-    const userStats = getUserStats();
 
-    const alreadySubmittedAnswer = (): boolean => {
-      let alreadySubmittedAnswer = false;
-      userStats.gamesPlayed.forEach((gameId) => {
-        if (gameId == game.id) {
-          alreadySubmittedAnswer = true;
-        }
-      });
-      return alreadySubmittedAnswer;
-    };
-    const submittedAnswer = ref(alreadySubmittedAnswer());
-    console.log(submittedAnswer.value);
-    const answerQuestion = (number: number) => {
-      if (submittedAnswer.value) {
+    const submittedAnswer = computed(() => getCurrentGame().submittedAnswer);
+    const submittedAnswerNumber = computed(
+      () => getCurrentGame().submittedAnswerNumber
+    );
+
+    const selectAnswer = (number: number) => {
+      if (getCurrentGame().submittedAnswer) {
         return;
       }
-      answerNumber.value = number;
-      selectedQuestion.value = true;
+      setSelectedAnswer(number);
     };
     const submitAnswer = () => {
-      if (selectedQuestion.value && !submittedAnswer.value) {
-        submittedAnswer.value = true;
-        if (answerNumber.value == game.correctChoice) {
+      if (selectedAnswer.value && !getCurrentGame().submittedAnswer) {
+        setSubmittedAnswer(getCurrentGame().selectedAnswerNumber);
+        if (getCurrentGame().submittedAnswerNumber == game.correctChoice) {
           answeredCorrect.value = true;
           showCorrectAnimation.value = true;
           addWin(game.id);
@@ -143,10 +154,11 @@ export default defineComponent({
     };
     return {
       game,
-      answerQuestion,
-      selectedQuestion,
-      answerNumber,
+      selectAnswer,
+      selectedAnswer,
+      selectedAnswerNumber,
       submittedAnswer,
+      submittedAnswerNumber,
       submitAnswer,
       answeredCorrect,
       showCorrectAnimation,
