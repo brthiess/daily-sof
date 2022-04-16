@@ -18,6 +18,7 @@
       <div class="content-container">
         <Stats v-show="showStats"></Stats>
         <Instructions v-show="showInstructions"></Instructions>
+        <Settings v-show="showSettings"></Settings>
       </div>
     </div>
   </div>
@@ -28,12 +29,14 @@ import { defineComponent, computed } from "vue";
 import { setIsDialogOpen, getLayout } from "../layout-state";
 import Stats from "./Stats.vue";
 import Instructions from "./Instructions.vue";
+import Settings from "./Settings.vue";
 
 export default defineComponent({
   name: "ModalDialog",
   components: {
     Stats,
     Instructions,
+    Settings,
   },
   setup() {
     const closeDialog = () => {
@@ -41,10 +44,12 @@ export default defineComponent({
     };
     const showStats = computed(() => getLayout().areStatsOpen);
     const showInstructions = computed(() => getLayout().areInstructionsOpen);
+    const showSettings = computed(() => getLayout().areSettingsOpen);
     return {
       closeDialog,
       showStats,
       showInstructions,
+      showSettings,
     };
   },
 });
