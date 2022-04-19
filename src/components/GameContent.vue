@@ -402,6 +402,7 @@ export default defineComponent({
 .rogue-answer-image-container.answered {
   opacity: 1;
   transform: translateY(0px);
+
   @media @smartphones {
     transform: translateY(7px);
   }
