@@ -33,19 +33,19 @@ export const games: Array<Game> = [
     correctChoice: 1,
     choices: [
       {
-        number: 1,
-        text: "Neptune's moon, Triton, is the only body known to have cryovolcanoes.",
         correct: true,
+        text: "Biologists have successfully grown an artificial pancreas from stem cells and demonstrated function in a rat model. ",
+        number: 1,
       },
       {
+        correct: false,
+        text: "Scientists have found a neural circuit that makes food taste better with increased hunger. ",
         number: 2,
-        text: "Up until the 1850s, astronomers recognized 11 planets in our solar system.",
-        correct: false,
       },
       {
-        number: 3,
-        text: "The body in our solar system with an atmosphere most similar to Earth's is Saturn's moon, Titan.",
         correct: false,
+        text: "Researchers find that strong storms can generate 'stormquakes' similar to earthquakes of magnitude > 3.5. ",
+        number: 3,
       },
     ],
     rogueAnswers: [
@@ -65,13 +65,13 @@ export const games: Array<Game> = [
         id: "bob",
         name: "Bob",
         correct: false,
-        number: 1,
+        number: 2,
       },
       {
         id: "cara",
         name: "Cara",
         correct: false,
-        number: 1,
+        number: 3,
       },
     ],
   },
@@ -85,19 +85,19 @@ export const games: Array<Game> = [
     correctChoice: 1,
     choices: [
       {
+        correct: false,
+        text: "A patient was treated for Sickle Cell disease with HIV engineered to deliver a corrected copy of the hemoglobin gene to his blood stem cells. ",
         number: 1,
-        text: "Neptune's moon, Triton, is the only body known to have cryovolcanoes.",
-        correct: true,
       },
       {
+        correct: false,
+        text: "Researchers have used a bubble of fat to deliver gene therapy through a nebulizer to patients with cystic fibrosis, improving lung function.  ",
         number: 2,
-        text: "Up until the 1850s, astronomers recognized 11 planets in our solar system.",
-        correct: false,
       },
       {
+        correct: true,
+        text: "Polio virus was engineered to introduce a new mutation which counteracts the effects of Huntington's disease in one patient who's disease progress has slowed significantly.",
         number: 3,
-        text: "The body in our solar system with an atmosphere most similar to Earth's is Saturn's moon, Titan.",
-        correct: false,
       },
     ],
     rogueAnswers: [

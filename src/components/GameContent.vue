@@ -1,5 +1,8 @@
 <template>
-  <div class="game-content-container">
+  <div
+    class="game-content-container"
+    :class="{ 'dark-theme': showDarkTheme, 'high-contrast': showHighContrast }"
+  >
     <h3 class="quiz-question-type-text">Multiple Choice Question</h3>
     <div class="quiz-date-number-container">
       <p class="quiz-episode-number">Episode: #{{ game.episodeNumber }}</p>
@@ -26,11 +29,18 @@
             v-for="(rogueAnswer, index) in game.rogueAnswers"
             :key="'rogueAnswer-' + index"
             class="rogue-answer-image-container"
-            v-bind:class="{ answered: game.answered }"
+            v-bind:class="{ answered: submittedAnswer }"
           >
             <div v-if="rogueAnswer.number == answer.number">
-              <img class="rogue-answer-image" v-bind:src="rogueAnswer.image" />
               <p class="rogue-answer-name">{{ rogueAnswer.name }}</p>
+            </div>
+          </li>
+          <li
+            class="rogue-answer-image-container"
+            v-bind:class="{ answered: submittedAnswer }"
+          >
+            <div v-if="selectedAnswerNumber == answer.number">
+              <p class="rogue-answer-name your-answer"><strong>You</strong></p>
             </div>
           </li>
         </ul>
@@ -49,8 +59,9 @@
         Submit
       </button>
     </div>
-    <div class="correct-modal">
+    <div class="correct-modal" :class="showCorrectAnimation ? 'visible' : ''">
       <lottie-animation
+        class="animation"
         v-if="showCorrectAnimation"
         path="correct.json"
         background="transparent"
@@ -59,8 +70,9 @@
         :autoPlay="showCorrectAnimation"
       ></lottie-animation>
     </div>
-    <div class="correct-modal">
+    <div class="correct-modal" :class="showIncorrectAnimation ? 'visible' : ''">
       <lottie-animation
+        class="animation"
         v-if="showIncorrectAnimation"
         path="incorrect.json"
         background="transparent"
@@ -78,6 +90,7 @@ import { games } from "../games";
 import { setAreStatsOpen } from "../layout-state";
 import LottieAnimation from "lottie-vuejs/src/LottieAnimation.vue"; // import lottie-vuejs
 import { addLoss, addWin } from "@/user-state";
+import { getSettings } from "../settings-state";
 import {
   setGame,
   loadCurrentGame,
@@ -95,7 +108,7 @@ export default defineComponent({
   setup() {
     loadCurrentGame();
     const now = new Date();
-    const startDate = new Date("April 15, 2022");
+    const startDate = new Date("April 18, 2022");
     const diff = Math.abs(now.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
 
@@ -152,6 +165,9 @@ export default defineComponent({
         }, 3000);
       }
     };
+
+    let showDarkTheme = computed(() => getSettings().darkTheme);
+    let showHighContrast = computed(() => getSettings().highContrast);
     return {
       game,
       selectAnswer,
@@ -163,6 +179,8 @@ export default defineComponent({
       answeredCorrect,
       showCorrectAnimation,
       showIncorrectAnimation,
+      showDarkTheme,
+      showHighContrast,
     };
   },
 });
@@ -190,6 +208,10 @@ export default defineComponent({
     padding-bottom: 5px;
     width: 260px;
   }
+  .dark-theme & {
+    color: white;
+    border-bottom: 1px solid #ccc;
+  }
 }
 
 .quiz-date-number-container {
@@ -201,9 +223,15 @@ export default defineComponent({
   @media @smartphones {
     font-size: 13px;
   }
+  .dark-theme & {
+    color: #ccc;
+  }
 }
 .quiz-episode-number {
   color: #333;
+  .dark-theme & {
+    color: #eee;
+  }
 }
 
 .quiz-question-container {
@@ -234,6 +262,9 @@ export default defineComponent({
   @media @smartphones {
     font-size: 24px;
   }
+  .dark-theme & {
+    color: white;
+  }
 }
 
 .quiz-answers-container {
@@ -263,7 +294,23 @@ export default defineComponent({
     background: rgb(191, 229, 255);
   }
   &.submitted-answer {
-    pointer-events: none;
+    cursor: initial;
+    &:hover {
+      background: white;
+    }
+    &.answer-correct {
+      background: #5fba7d;
+    }
+  }
+  .dark-theme & {
+    background: #797979;
+    color: white;
+    &:hover {
+      background: #505050;
+    }
+    &.submitted-answer {
+      background: #797979;
+    }
   }
   @media @tablets {
     margin: 10px 0;
@@ -283,12 +330,21 @@ export default defineComponent({
 .quiz-answer.this-answer-picked {
   background: #105c90;
   color: white;
+  .dark-theme & {
+    background: #399fe5;
+  }
 }
 .quiz-answer.this-answer-picked.answer-incorrect {
   background: #e74c3c;
+  .dark-theme & {
+    background: #e74c3c;
+  }
 }
 .quiz-answer.answer-correct {
   background: #5fba7d;
+  .dark-theme & {
+    background: #5fba7d;
+  }
 }
 
 .quiz-answer:first-child {
@@ -313,20 +369,11 @@ export default defineComponent({
   display: flex;
   position: absolute;
   padding: 0;
-  top: -43px;
-  right: 15px;
-  pointer-events: none;
-  @media @laptops {
-    top: -30px;
-  }
-  @media @tablets {
-    top: -13px;
-  }
+  top: -26px;
+  right: 0;
 }
 .rogue-answer-image-container {
   position: relative;
-  height: 40px;
-  width: 40px;
   margin-left: 10px;
   transition: all 0.3s;
   transition-delay: 1s;
@@ -335,10 +382,6 @@ export default defineComponent({
   display: flex;
   flex-flow: column;
   align-items: center;
-  @media @laptops {
-    height: 25px;
-    width: 25px;
-  }
 }
 @iterations: 1;
 
@@ -357,13 +400,7 @@ export default defineComponent({
   opacity: 1;
   transform: translateY(0px);
 }
-.rogue-answer-image {
-  height: 100%;
-  width: 100%;
-  border-radius: 20px;
-  object-fit: cover;
-  object-position: center;
-}
+
 .rogue-answer-name {
   background: #0e5c90;
   box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.3);
@@ -373,23 +410,16 @@ export default defineComponent({
   border-radius: 5px;
   left: -50%;
   transition: all;
-  visibility: hidden;
-  opacity: 0;
   transition-delay: 0.05s;
   min-width: min-content;
-  &:hover {
-    opacity: 1;
-    visibility: visible;
-  }
   @media @smartphones {
     font-size: 13px;
   }
 }
-.rogue-answer-image:hover + .rogue-answer-name {
-  opacity: 1;
-  visibility: visible;
-  transition-delay: 0s;
+.your-answer {
+  background: #5dc2e5;
 }
+
 .quiz-question-number {
   font-size: 140px;
   align-self: flex-end;
@@ -442,5 +472,12 @@ export default defineComponent({
   justify-content: center;
   left: 0;
   height: 100%;
+  display: none;
+  &.visible {
+    display: block;
+  }
+}
+.animation {
+  background: #0007;
 }
 </style>

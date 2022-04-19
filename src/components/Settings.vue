@@ -5,8 +5,17 @@
       <div class="setting">
         <p class="text">Dark Theme</p>
         <toggle-button
-          v-on:change="toggleDarkTheme"
+          id="dark-theme"
+          v-on:toggle="toggleDarkTheme"
           :defaultState="showDarkTheme"
+        ></toggle-button>
+      </div>
+      <div class="setting">
+        <p class="text">High Contrast</p>
+        <toggle-button
+          id="high-contrast"
+          v-on:toggle="toggleHighContrast"
+          :defaultState="showHighContrast"
         ></toggle-button>
       </div>
     </div>
@@ -27,10 +36,16 @@ export default defineComponent({
     const toggleDarkTheme = (newValue: boolean) => {
       setDarkTheme(newValue);
     };
+    const toggleHighContrast = (newValue: boolean) => {
+      setHighContrast(newValue);
+    };
     let showDarkTheme = computed(() => getSettings().darkTheme);
+    let showHighContrast = computed(() => getSettings().highContrast);
     return {
       toggleDarkTheme,
+      toggleHighContrast,
       showDarkTheme,
+      showHighContrast,
     };
   },
 });
@@ -45,5 +60,20 @@ h4 {
   &:first-child {
     margin-top: 0;
   }
+}
+.settings-container {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0 30px;
+}
+.setting {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  border-bottom: 1px solid #ccc;
+  padding: 4px 0;
 }
 </style>
