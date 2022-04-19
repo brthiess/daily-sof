@@ -5,7 +5,11 @@
   >
     <navigation></navigation>
     <game-content></game-content>
-    <modal-dialog v-if="showDialog"></modal-dialog>
+    <modal-dialog
+      v-if="showDialog"
+      class="modal-dialog"
+      :class="showDialog ? 'show-dialog' : ''"
+    ></modal-dialog>
   </div>
 </template>
 
@@ -36,6 +40,7 @@ export default defineComponent({
     });
     let showDarkTheme = computed(() => getSettings().darkTheme);
     let showHighContrast = computed(() => getSettings().highContrast);
+    //document.querySelector("html")?.classList.add("dark-theme");
     return {
       showDialog,
       showDarkTheme,
@@ -66,7 +71,16 @@ body,
 .app {
   height: 100%;
 }
+html.dark-theme,
 .app.dark-theme {
   background: #444;
+}
+.modal-dialog {
+  transform: translateY(100px);
+  transition: all 1s;
+  transition-delay: 0.1s;
+}
+.show-dialog {
+  transform: translateY(0);
 }
 </style>
