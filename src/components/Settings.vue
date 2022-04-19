@@ -10,14 +10,6 @@
           :defaultState="showDarkTheme"
         ></toggle-button>
       </div>
-      <div class="setting">
-        <p class="text">High Contrast</p>
-        <toggle-button
-          id="high-contrast"
-          v-on:toggle="toggleHighContrast"
-          :defaultState="showHighContrast"
-        ></toggle-button>
-      </div>
     </div>
   </div>
 </template>

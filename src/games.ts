@@ -64,14 +64,14 @@ export const games: Array<Game> = [
       {
         id: "bob",
         name: "Bob",
-        correct: false,
-        number: 2,
+        correct: true,
+        number: 1,
       },
       {
         id: "cara",
         name: "Cara",
-        correct: false,
-        number: 3,
+        correct: true,
+        number: 1,
       },
     ],
   },
@@ -82,7 +82,7 @@ export const games: Array<Game> = [
     date: "May 31, 2014",
     episodeNumber: 465,
     question: "Pick the fiction",
-    correctChoice: 1,
+    correctChoice: 3,
     choices: [
       {
         correct: false,
@@ -110,20 +110,72 @@ export const games: Array<Game> = [
       {
         id: "evan",
         name: "Evan",
-        correct: true,
+        correct: false,
         number: 1,
       },
       {
         id: "bob",
         name: "Bob",
-        correct: true,
+        correct: false,
         number: 1,
       },
       {
         id: "cara",
         name: "Cara",
         correct: true,
+        number: 3,
+      },
+    ],
+  },
+  {
+    day: 3,
+    id: 3,
+    type: "normal",
+    date: "May 1, 2019",
+    episodeNumber: 566,
+    question: "Pick the fiction",
+    correctChoice: 2,
+    choices: [
+      {
+        correct: false,
+        text: "A new paper demonstrates how it is possible to have negative energy.  ",
         number: 1,
+      },
+      {
+        correct: true,
+        text: "Scientists have created nanoengineered silver which they claim is 42% stronger than the strongest steel alloy. ",
+        number: 2,
+      },
+      {
+        correct: false,
+        text: "A new prototype bionic leg has detailed sensory feedback sufficient to allow users to walk blindfolded.  ",
+        number: 3,
+      },
+    ],
+    rogueAnswers: [
+      {
+        id: "jay",
+        name: "Jay",
+        correct: false,
+        number: 3,
+      },
+      {
+        id: "evan",
+        name: "Evan",
+        correct: false,
+        number: 1,
+      },
+      {
+        id: "bob",
+        name: "Bob",
+        correct: true,
+        number: 2,
+      },
+      {
+        id: "cara",
+        name: "Cara",
+        correct: true,
+        number: 2,
       },
     ],
   },

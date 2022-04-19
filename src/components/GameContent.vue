@@ -277,6 +277,9 @@ export default defineComponent({
   @media @tablets {
     flex-flow: column;
   }
+  @media @tablets {
+    margin-top: 40px;
+  }
 }
 
 .quiz-answer {
@@ -313,7 +316,7 @@ export default defineComponent({
     }
   }
   @media @tablets {
-    margin: 10px 0;
+    margin: 20px 0;
     font-size: 18px;
     padding: 15px 30px;
   }
@@ -399,6 +402,9 @@ export default defineComponent({
 .rogue-answer-image-container.answered {
   opacity: 1;
   transform: translateY(0px);
+  @media @smartphones {
+    transform: translateY(7px);
+  }
 }
 
 .rogue-answer-name {
@@ -417,7 +423,7 @@ export default defineComponent({
   }
 }
 .your-answer {
-  background: #5dc2e5;
+  background: rgb(0, 98, 102);
 }
 
 .quiz-question-number {
