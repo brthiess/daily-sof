@@ -6,7 +6,7 @@
     <navigation></navigation>
     <game-content></game-content>
     <modal-dialog
-      v-if="showDialog"
+      v-show="showDialog"
       class="modal-dialog"
       :class="showDialog ? 'show-dialog' : ''"
     ></modal-dialog>
@@ -47,6 +47,16 @@ export default defineComponent({
       showHighContrast,
     };
   },
+  watch: {
+    // whenever question changes, this function will run
+    showDarkTheme(showDarkTheme: boolean) {
+      if (showDarkTheme) {
+        document.querySelector("html")?.classList.add("dark-theme");
+      } else {
+        document.querySelector("html")?.classList.remove("dark-theme");
+      }
+    },
+  },
 });
 </script>
 
@@ -74,13 +84,5 @@ body,
 html.dark-theme,
 .app.dark-theme {
   background: #444;
-}
-.modal-dialog {
-  transform: translateY(100px);
-  transition: all 1s;
-  transition-delay: 0.1s;
-}
-.show-dialog {
-  transform: translateY(0);
 }
 </style>

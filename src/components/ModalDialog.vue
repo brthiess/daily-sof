@@ -1,7 +1,11 @@
 <template>
   <div
     class="dialog-container"
-    :class="{ 'dark-theme': showDarkTheme, 'high-contrast': showHighContrast }"
+    :class="{
+      'dark-theme': showDarkTheme,
+      'high-contrast': showHighContrast,
+      'closing-dialog': closingDialog,
+    }"
   >
     <div class="backdrop" @click="closeDialog"></div>
     <div class="dialog">
@@ -19,16 +23,16 @@
         </svg>
       </div>
       <div class="content-container">
-        <Stats v-show="showStats"></Stats>
-        <Instructions v-show="showInstructions"></Instructions>
-        <Settings v-show="showSettings"></Settings>
+        <Stats v-if="showStats"></Stats>
+        <Instructions v-if="showInstructions"></Instructions>
+        <Settings v-if="showSettings"></Settings>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import { setIsDialogOpen, getLayout } from "../layout-state";
 import Stats from "./Stats.vue";
 import Instructions from "./Instructions.vue";
@@ -44,13 +48,18 @@ export default defineComponent({
   },
   setup() {
     const closeDialog = () => {
-      setIsDialogOpen(false);
+      closingDialog.value = true;
+      setTimeout(function () {
+        setIsDialogOpen(false);
+        closingDialog.value = false;
+      }, 200);
     };
     const showStats = computed(() => getLayout().areStatsOpen);
     const showInstructions = computed(() => getLayout().areInstructionsOpen);
     const showSettings = computed(() => getLayout().areSettingsOpen);
     let showDarkTheme = computed(() => getSettings().darkTheme);
     let showHighContrast = computed(() => getSettings().highContrast);
+    let closingDialog = ref(false);
     return {
       closeDialog,
       showStats,
@@ -58,6 +67,7 @@ export default defineComponent({
       showSettings,
       showDarkTheme,
       showHighContrast,
+      closingDialog,
     };
   },
 });
@@ -84,7 +94,9 @@ export default defineComponent({
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-flow: column;
+
   padding-top: 20px;
+
   .dark-theme & {
     background: #333;
     color: white;
@@ -97,7 +109,36 @@ export default defineComponent({
     width: 100%;
     border-radius: 0;
   }
+  .show-dialog & {
+    animation: slideIn 0.3s ease forwards;
+  }
+  .closing-dialog & {
+    animation: slideOut 0.2s ease forwards;
+  }
 }
+
+@keyframes slideIn {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+}
+
 .close-button {
   align-self: flex-end;
   padding: 10px;
