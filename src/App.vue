@@ -40,7 +40,6 @@ export default defineComponent({
     });
     let showDarkTheme = computed(() => getSettings().darkTheme);
     let showHighContrast = computed(() => getSettings().highContrast);
-    //document.querySelector("html")?.classList.add("dark-theme");
     return {
       showDialog,
       showDarkTheme,
@@ -54,6 +53,13 @@ export default defineComponent({
         document.querySelector("html")?.classList.add("dark-theme");
       } else {
         document.querySelector("html")?.classList.remove("dark-theme");
+      }
+    },
+    showDialog(showDialog: boolean) {
+      if (showDialog) {
+        document.querySelector("html")?.classList.add("dialog-open");
+      } else {
+        document.querySelector("html")?.classList.remove("dialog-open");
       }
     },
   },
@@ -81,8 +87,7 @@ body,
 .app {
   height: 100%;
 }
-html.dark-theme,
-.app.dark-theme {
-  background: #444;
+html.dialog-open {
+  overflow: hidden;
 }
 </style>

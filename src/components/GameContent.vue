@@ -108,7 +108,7 @@ export default defineComponent({
   setup() {
     loadCurrentGame();
     const now = new Date();
-    const startDate = new Date("April 18, 2022");
+    const startDate = new Date("April 21, 2022");
     const diff = Math.abs(now.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
 
@@ -193,6 +193,9 @@ export default defineComponent({
   padding: 60px 40px;
   max-width: 1500px;
   margin: auto;
+  .dark-theme & {
+    background-color: #444;
+  }
 }
 
 .quiz-question-type-text {
