@@ -108,11 +108,11 @@ export default defineComponent({
   setup() {
     loadCurrentGame();
     const now = new Date();
-    const startDate = new Date("April 21, 2022");
+    const startDate = new Date("May 1, 2022");
     const diff = Math.abs(now.getTime() - startDate.getTime());
-    const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+    const diffWeeks = Math.ceil(diff / (1000 * 3600 * 24 * 7));
 
-    const game = games.filter((game) => game.day == diffDays)[0];
+    const game = games.filter((game) => game.week == diffWeeks)[0];
     if (getCurrentGame().game?.id != game.id) {
       resetCurrentGame();
     }

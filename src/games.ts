@@ -1,5 +1,5 @@
 export interface Game {
-  day: number; //The day number this game should be shown
+  week: number; //The day number this game should be shown
   id: number; //The id of the game
   type: string;
   date: string;
@@ -24,7 +24,7 @@ export interface RogueAnswer {
 }
 export const games: Array<Game> = [
   {
-    day: 1,
+    week: 1,
     id: 1,
     type: "normal",
     date: "May 31, 2014",
@@ -76,7 +76,7 @@ export const games: Array<Game> = [
     ],
   },
   {
-    day: 2,
+    week: 2,
     id: 2,
     type: "normal",
     date: "May 31, 2014",
@@ -128,7 +128,7 @@ export const games: Array<Game> = [
     ],
   },
   {
-    day: 3,
+    week: 3,
     id: 3,
     type: "normal",
     date: "May 1, 2019",

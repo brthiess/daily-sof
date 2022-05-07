@@ -18,7 +18,7 @@
         </svg>
       </button>
     </div>
-    <div class="logo">Science or Fiction Daily</div>
+    <div class="logo">Science or Fiction Weekly</div>
     <div class="right-container">
       <button class="stats-icon" @click="openStats">
         <svg

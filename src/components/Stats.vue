@@ -69,7 +69,24 @@
     </ul>
     <div class="next-sof">
       <h4 class="next-sof-text">Next Science Or Fiction</h4>
-      <div class="time-left">{{ timeLeft }}</div>
+      <div class="time-left">
+        <div class="time">
+          <div class="time-number">{{ daysLeft }}</div>
+          <div class="time-type">Days</div>
+        </div>
+        <div class="time">
+          <div class="time-number">{{ hoursLeft }}</div>
+          <div class="time-type">Hours</div>
+        </div>
+        <div class="time">
+          <div class="time-number">{{ minutesLeft }}</div>
+          <div class="time-type">Minutes</div>
+        </div>
+        <div class="time">
+          <div class="time-number">{{ secondsLeft }}</div>
+          <div class="time-type">Seconds</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -88,34 +105,75 @@ export default defineComponent({
 
     let rankings = compileRogueStats();
 
-    const getTimeString = () => {
-      let endTime = new Date();
-      endTime.setDate(new Date().getDate() + 1);
-      endTime.setHours(0, 0, 0, 0);
-      let hoursLeft = Math.abs(endTime.getTime() - new Date().getTime()) / 36e5;
+    const getTimeLeft = (): TimeLeft => {
+      let nextSunday = nextDayAndTime(0, 0, 0);
+
+      let daysLeft =
+        Math.abs(nextSunday.getTime() - new Date().getTime()) / (36e5 * 24);
+      let hoursLeft = 24 * (daysLeft % 1);
       let minutesLeft = 60 * (hoursLeft % 1);
       let secondsLeft = 60 * (minutesLeft % 1);
-      let timeString =
-        Math.floor(hoursLeft) +
-        ":" +
-        Math.floor(minutesLeft) +
-        ":" +
-        Math.floor(secondsLeft);
-      return timeString;
+      let timeLeft: TimeLeft = {
+        Days: Math.floor(daysLeft),
+        Hours: Math.floor(hoursLeft),
+        Minutes: Math.floor(minutesLeft),
+        Seconds: Math.floor(secondsLeft),
+      };
+      return timeLeft;
     };
 
-    let timeLeft = ref(getTimeString());
+    let daysLeft = ref<number>();
     setInterval(function () {
-      timeLeft.value = getTimeString();
+      daysLeft.value = getTimeLeft().Days;
+    }, 1000);
+
+    let hoursLeft = ref<number>();
+    setInterval(function () {
+      hoursLeft.value = getTimeLeft().Hours;
+    }, 1000);
+
+    let minutesLeft = ref<number>();
+    setInterval(function () {
+      minutesLeft.value = getTimeLeft().Minutes;
+    }, 1000);
+
+    let secondsLeft = ref<number>();
+    setInterval(function () {
+      secondsLeft.value = getTimeLeft().Seconds;
     }, 1000);
 
     return {
       userStats,
       rankings,
-      timeLeft,
+      daysLeft,
+      hoursLeft,
+      minutesLeft,
+      secondsLeft,
     };
   },
 });
+
+interface TimeLeft {
+  Days: number;
+  Hours: number;
+  Minutes: number;
+  Seconds: number;
+}
+
+function nextDayAndTime(dayOfWeek: number, hour: number, minute: number): Date {
+  var now = new Date();
+  var result = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + ((7 + dayOfWeek - now.getDay()) % 7),
+    hour,
+    minute
+  );
+
+  if (result < now) result.setDate(result.getDate() + 7);
+
+  return result;
+}
 
 function compare(a: RogueStats, b: RogueStats) {
   let aPercentage = a.numberOfGamesWon / a.numberOfGamesPlayed;
@@ -233,7 +291,20 @@ li {
   margin: 0;
 }
 .time-left {
-  font-size: 36px;
+  display: flex;
   text-align: center;
+  justify-content: center;
+}
+.time {
+  display: flex;
+  flex-flow: column;
+  margin: 0 20px;
+}
+.time-number {
+  font-size: 38px;
+}
+.time-type {
+  font-size: 13px;
+  text-transform: uppercase;
 }
 </style>

@@ -90,4 +90,7 @@ body,
 html.dialog-open {
   overflow: hidden;
 }
+.dark-theme.app {
+  background-color: #444;
+}
 </style>
