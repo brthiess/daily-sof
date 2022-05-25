@@ -1,0 +1,158 @@
+[
+  {
+    "week": 1,
+    "id": 1,
+    "type": "normal",
+    "date": "December 19, 2020",
+    "episodeNumber": 806,
+    "question": "Pick the fiction",
+    "correctChoice": 1,
+    "choices": [
+      {
+        "correct": true,
+        "text": "Neuroscientists find that reading computer code heavily involves language processing areas of the brain, and is therefore similar to a language",
+        "number": 1
+      },
+      {
+        "correct": false,
+        "text": "A study of the most distant known object in the universe, galaxy GN-z11, which is 13.4 billion light years from Earth, contains heavier elements, which means there are older galaxies still.",
+        "number": 2
+      },
+      {
+        "correct": false,
+        "text": "Astronomers report the first possible radio signal coming from an exoplanet.",
+        "number": 3
+      }
+    ],
+    "rogueAnswers": [
+      {
+        "id": "jay",
+        "name": "Jay",
+        "correct": false,
+        "number": 2
+      },
+      {
+        "id": "evan",
+        "name": "Evan",
+        "correct": true,
+        "number": 1
+      },
+      {
+        "id": "bob",
+        "name": "Bob",
+        "correct": true,
+        "number": 1
+      },
+      {
+        "id": "cara",
+        "name": "Cara",
+        "correct": true,
+        "number": 1
+      }
+    ]
+  },
+  {
+    "week": 2,
+    "id": 2,
+    "type": "normal",
+    "date": "December 19, 2022",
+    "episodeNumber": 809,
+    "question": "Pick the fiction",
+    "correctChoice": 1,
+    "choices": [
+      {
+        "correct": true,
+        "text": "Neuroscientists find that reading computer code heavily involves language processing areas of the brain, and is therefore similar to a language",
+        "number": 1
+      },
+      {
+        "correct": false,
+        "text": "A study of the most distant known object in the universe, galaxy GN-z11, which is 13.4 billion light years from Earth, contains heavier elements, which means there are older galaxies still.",
+        "number": 2
+      },
+      {
+        "correct": false,
+        "text": "Astronomers report the first possible radio signal coming from an exoplanet.",
+        "number": 3
+      }
+    ],
+    "rogueAnswers": [
+      {
+        "id": "jay",
+        "name": "Jay",
+        "correct": false,
+        "number": 2
+      },
+      {
+        "id": "evan",
+        "name": "Evan",
+        "correct": true,
+        "number": 1
+      },
+      {
+        "id": "bob",
+        "name": "Bob",
+        "correct": true,
+        "number": 1
+      },
+      {
+        "id": "cara",
+        "name": "Cara",
+        "correct": true,
+        "number": 1
+      }
+    ]
+  },
+  {
+    "week": 3,
+    "id": 3,
+    "type": "normal",
+    "date": "December 19, 2021",
+    "episodeNumber": 807,
+    "question": "Pick the fiction",
+    "correctChoice": 1,
+    "choices": [
+      {
+        "correct": true,
+        "text": "Neuroscientists find that reading computer code heavily involves language processing areas of the brain, and is therefore similar to a language",
+        "number": 1
+      },
+      {
+        "correct": false,
+        "text": "A study of the most distant known object in the universe, galaxy GN-z11, which is 13.4 billion light years from Earth, contains heavier elements, which means there are older galaxies still.",
+        "number": 2
+      },
+      {
+        "correct": false,
+        "text": "Astronomers report the first possible radio signal coming from an exoplanet.",
+        "number": 3
+      }
+    ],
+    "rogueAnswers": [
+      {
+        "id": "jay",
+        "name": "Jay",
+        "correct": false,
+        "number": 2
+      },
+      {
+        "id": "evan",
+        "name": "Evan",
+        "correct": true,
+        "number": 1
+      },
+      {
+        "id": "bob",
+        "name": "Bob",
+        "correct": true,
+        "number": 1
+      },
+      {
+        "id": "cara",
+        "name": "Cara",
+        "correct": true,
+        "number": 1
+      }
+    ]
+  }
+]
